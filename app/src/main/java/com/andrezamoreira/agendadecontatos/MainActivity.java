@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
@@ -18,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
     private ContatoDAO helper;
 
     private List<ContatoInfo> listaContatos;
+
+    private RecyclerView contatosRecy;
+    private ContatoAdapter adapter;
 
     // verificar se é novo contato ou ediçao
     private final int REQUEST_NEW = 1;
@@ -40,13 +45,15 @@ public class MainActivity extends AppCompatActivity {
                 // trocar de tela ao clicar no botão
                 Intent i = new Intent(MainActivity.this, EditActivity.class);
                 // novo contato
-                //i.putExtra("contato", new ContatoInfo());
+                i.putExtra("contato", new ContatoInfo());
 
                 // dados de teste
+                /*
                 ContatoInfo teste = new ContatoInfo();
                 teste.setNome("Contato Teste!");
                 teste.setEmail("Contato Email Teste");
                 i.putExtra("contato", teste);
+                */
 
                 // adiciona um novo contato
                 startActivityForResult(i, REQUEST_NEW);
@@ -55,6 +62,17 @@ public class MainActivity extends AppCompatActivity {
 
         helper = new ContatoDAO(this);
         listaContatos = helper.getLista("ASC");
+
+        // lista de contatos
+        contatosRecy = findViewById(R.id.contatosRecyclerView);
+        contatosRecy.setHasFixedSize(true);
+        LinearLayoutManager lln = new LinearLayoutManager(this);
+        lln.setOrientation(LinearLayoutManager.VERTICAL);
+        contatosRecy.setLayoutManager(lln);
+
+        // adaptador
+        adapter = new ContatoAdapter(listaContatos);
+        contatosRecy.setAdapter(adapter);
 
     }
 
@@ -65,12 +83,15 @@ public class MainActivity extends AppCompatActivity {
             ContatoInfo contatoInfo = data.getParcelableExtra("contato");
             helper.inserirContato(contatoInfo);
             listaContatos = helper.getLista("ASC");
-
+            adapter = new ContatoAdapter(listaContatos);
+            contatosRecy.setAdapter(adapter);
         } else if (requestCode == REQUEST_ALTER && resultCode == RESULT_OK){
             // edita contato
             ContatoInfo contatoInfo = data.getParcelableExtra("contato");
             helper.alteraContato(contatoInfo);
             listaContatos = helper.getLista("ASC");
+            adapter = new ContatoAdapter(listaContatos);
+            contatosRecy.setAdapter(adapter);
         }
     }
 

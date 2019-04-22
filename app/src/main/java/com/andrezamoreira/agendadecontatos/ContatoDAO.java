@@ -30,6 +30,7 @@ public class ContatoDAO extends SQLiteOpenHelper {
                 + " ref TEXT, "
                 + " email TEXT, "
                 + " endereco TEXT, "
+                + " fone TEXT, "
                 + " foto TEXT);";
         sqLiteDatabase.execSQL(sql);
     }
@@ -53,7 +54,7 @@ public class ContatoDAO extends SQLiteOpenHelper {
             c.setRef(cursor.getString(cursor.getColumnIndex("ref")));
             c.setEmail(cursor.getString(cursor.getColumnIndex("email")));
             c.setFone(cursor.getString(cursor.getColumnIndex("fone")));
-            c.setEnd(cursor.getString(cursor.getColumnIndex("end")));
+            c.setEnd(cursor.getString(cursor.getColumnIndex("endereco")));
             c.setFoto(cursor.getString(cursor.getColumnIndex("foto")));
 
             contatos.add(c);
@@ -73,7 +74,7 @@ public class ContatoDAO extends SQLiteOpenHelper {
         values.put("ref", c.getRef());
         values.put("email", c.getEmail());
         values.put("fone", c.getFone());
-        values.put("end", c.getEnd());
+        values.put("endereco", c.getEnd());
         values.put("foto", c.getFoto());
 
         // salvando
@@ -90,7 +91,7 @@ public class ContatoDAO extends SQLiteOpenHelper {
         values.put("ref", c.getRef());
         values.put("email", c.getEmail());
         values.put("fone", c.getFone());
-        values.put("end", c.getEnd());
+        values.put("endereco", c.getEnd());
         values.put("foto", c.getFoto());
 
         String[] idParaSerAlterado = {c.getId().toString()};
