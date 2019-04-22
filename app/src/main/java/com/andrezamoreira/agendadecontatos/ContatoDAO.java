@@ -1,11 +1,13 @@
 package com.andrezamoreira.agendadecontatos;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
 
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,7 @@ public class ContatoDAO extends SQLiteOpenHelper {
 
     }
 
+    // TODO: banco de dados
     public List<ContatoInfo> getLista(String order){
         List<ContatoInfo> contatos = new ArrayList<>();
 
@@ -59,5 +62,49 @@ public class ContatoDAO extends SQLiteOpenHelper {
         cursor.close();
 
         return contatos;
+    }
+
+    public void inserirContato(ContatoInfo c){
+        // para setar os valores no banco de dados
+        ContentValues values = new ContentValues();
+
+        // dados
+        values.put("nome", c.getNome());
+        values.put("ref", c.getRef());
+        values.put("email", c.getEmail());
+        values.put("fone", c.getFone());
+        values.put("end", c.getEnd());
+        values.put("foto", c.getFoto());
+
+        // salvando
+        getWritableDatabase().insert(TABELA, null, values);
+    }
+
+    public void alteraContato(ContatoInfo c){
+        // para setar os valores no banco de dados
+        ContentValues values = new ContentValues();
+
+        // dados
+        values.put("id", c.getId());
+        values.put("nome", c.getNome());
+        values.put("ref", c.getRef());
+        values.put("email", c.getEmail());
+        values.put("fone", c.getFone());
+        values.put("end", c.getEnd());
+        values.put("foto", c.getFoto());
+
+        String[] idParaSerAlterado = {c.getId().toString()};
+        // alterando valores no banco de dados de acordo com o id
+        getWritableDatabase().update(TABELA, values,"id=?", idParaSerAlterado);
+    }
+
+    public void apagaContato(ContatoInfo c){
+        SQLiteDatabase db = getWritableDatabase();
+
+        // id que será excluido
+        String[] args = {c.getId().toString()};
+
+        // excluindo do banco de dados
+        db.delete(TABELA, "id=?", args);
     }
 }
