@@ -21,7 +21,7 @@ public class ContatoAdapter extends RecyclerView.Adapter<ContatoAdapter.ContactV
     ContatoAdapter(List<ContatoInfo> lista){
         listaContatos = lista;
     }
-    
+
     @Override
     public ContactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.celula_contato, parent, false);
@@ -61,7 +61,7 @@ public class ContatoAdapter extends RecyclerView.Adapter<ContatoAdapter.ContactV
 
             foto = v.findViewById(R.id.fotoImageView);
             nome = v.findViewById(R.id.nomeTextView);
-            referencia = v.findViewById(R.id.nomeTextView);
+            referencia = v.findViewById(R.id.referenciaTextView);
             telefone = v.findViewById(R.id.telefoneTextView);
         }
     }
