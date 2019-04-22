@@ -3,8 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.andrezamoreira.agendadecontatos.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/order_az"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="Ordenar A-Z"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/order_za"
+        android:orderInCategory="100"
+        android:title="Ordenar Z-A"
         app:showAsAction="never" />
 </menu>

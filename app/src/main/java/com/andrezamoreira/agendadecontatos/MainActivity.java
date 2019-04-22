@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private final int REQUEST_NEW = 1;
     private final int REQUEST_ALTER = 2;
 
+    // ordenar A-Z / Z-A
+    private String order = "ASC";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,14 +97,14 @@ public class MainActivity extends AppCompatActivity {
             // cria contato
             ContatoInfo contatoInfo = data.getParcelableExtra("contato");
             helper.inserirContato(contatoInfo);
-            listaContatos = helper.getLista("ASC");
+            listaContatos = helper.getLista(order);
             adapter = new ContatoAdapter(listaContatos);
             contatosRecy.setAdapter(adapter);
         } else if (requestCode == REQUEST_ALTER && resultCode == RESULT_OK){
             // edita contato
             ContatoInfo contatoInfo = data.getParcelableExtra("contato");
             helper.alteraContato(contatoInfo);
-            listaContatos = helper.getLista("ASC");
+            listaContatos = helper.getLista(order);
             adapter = new ContatoAdapter(listaContatos);
             contatosRecy.setAdapter(adapter);
         }
@@ -142,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+    // menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -149,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    // item do menu clicado
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -157,10 +162,17 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.order_az) {
+            order = "ASC";
+        } else if (id == R.id.order_za){
+            order = "DESC";
         }
 
-        return super.onOptionsItemSelected(item);
+        //itens ordernados
+        listaContatos = helper.getLista(order);
+        adapter = new ContatoAdapter(listaContatos);
+        contatosRecy.setAdapter(adapter);
+
+        return true;
     }
 }
