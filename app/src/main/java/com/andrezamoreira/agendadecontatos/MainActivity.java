@@ -1,13 +1,17 @@
 package com.andrezamoreira.agendadecontatos;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -103,8 +107,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void abrirOpcoes(ContatoInfo contato){
-        
+    private void abrirOpcoes(final ContatoInfo contato){
+        //Log.d("Log", contato.getNome());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(contato.getNome());
+
+        // sequencia de itens
+        builder.setItems(new CharSequence[]{"Ligar", "Editar", "Excluir"},
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        switch (i){
+                            case 0:
+                                // ligar
+                                Intent intent = new Intent(Intent.ACTION_DIAL);
+                                intent.setData(Uri.parse("tel:" + contato.getFone()));
+                                startActivity(intent);
+                                break;
+                            case 1:
+                                // editar
+                                Intent intent1 = new Intent(MainActivity.this, EditActivity.class);
+                                intent1.putExtra("contato", contato);
+                                startActivityForResult(intent1, REQUEST_ALTER);
+                                break;
+                            case 2:
+                                // excluir
+                                listaContatos.remove(contato);
+                                helper.apagaContato(contato);
+                                adapter.notifyDataSetChanged();
+                                break;
+                        }
+                    }
+                });
+        builder.create().show();
     }
 
     @Override
