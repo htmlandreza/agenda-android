@@ -11,7 +11,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+
+    private ContatoDAO helper;
+
+    private List<ContatoInfo> listaContatos;
 
     // verificar se é novo contato ou ediçao
     private final int REQUEST_NEW = 1;
@@ -46,16 +52,25 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(i, REQUEST_NEW);
             }
         });
+
+        helper = new ContatoDAO(this);
+        listaContatos = helper.getLista("ASC");
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_NEW && resultCode == RESULT_OK){
             // cria contato
+            ContatoInfo contatoInfo = data.getParcelableExtra("contato");
+            helper.inserirContato(contatoInfo);
+            listaContatos = helper.getLista("ASC");
 
         } else if (requestCode == REQUEST_ALTER && resultCode == RESULT_OK){
             // edita contato
-
+            ContatoInfo contatoInfo = data.getParcelableExtra("contato");
+            helper.alteraContato(contatoInfo);
+            listaContatos = helper.getLista("ASC");
         }
     }
 
